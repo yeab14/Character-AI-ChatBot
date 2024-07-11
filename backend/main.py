@@ -18,8 +18,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load DialoGPT-medium model and tokenizer
-model_name = "microsoft/DialoGPT-medium"
+# Load Pygmalion 7B model and tokenizer
+model_name = "EleutherAI/gpt-neo-2.7B"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name)
 generator = pipeline("text-generation", model=model, tokenizer=tokenizer)
