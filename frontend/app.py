@@ -58,7 +58,7 @@ st.markdown(
         max-width: 70%;
     }
     footer {
-        visibility: hidden;
+        visibility: visible;
     }
     </style>
     """,
@@ -90,19 +90,25 @@ st.title("Roleplay Chatbot")
 
 user_input = st.text_area("Enter your message here...")
 
+# Character ID selection (optional based on your implementation)
+character_id = "default_character_id"  # Replace with actual logic to get character ID
+
 if st.button("Send"):
     if user_input:
         with st.spinner("Generating response..."):
-            response = requests.post(
-                "http://localhost:8000/chat",
-                json={"user_input": user_input}
-            )
-            if response.status_code == 200:
-                response_text = response.json()["response"]
-                st.session_state['chat_history'].append(("You", user_input))
-                st.session_state['chat_history'].append(("Bot", response_text))
-            else:
-                st.error("Error: " + str(response.status_code))
+            try:
+                response = requests.post(
+                    "http://127.0.0.1:8000/chat",
+                    json={"user_input": user_input, "character_id": character_id}
+                )
+                if response.status_code == 200:
+                    response_text = response.json()["response"]
+                    st.session_state['chat_history'].append(("You", user_input))
+                    st.session_state['chat_history'].append(("Bot", response_text))
+                else:
+                    st.error("Error: " + str(response.status_code))
+            except requests.exceptions.RequestException as e:
+                st.error(f"Error: {e}")
     else:
         st.warning("Please enter a message.")
 
@@ -119,20 +125,11 @@ st.markdown('</div>', unsafe_allow_html=True)
 st.markdown(
     """
     <footer>
-    <p>Developed by [Your Name]. Powered by Streamlit and FastAPI.</p>
+    <p>Developed by Yeabsira Dereje. Powered by Streamlit and FastAPI.</p>
     </footer>
     """,
     unsafe_allow_html=True,
 )
 
-# Hide Streamlit footer and menu
-hide_st_style = """
-    <style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    </style>
-"""
-st.markdown(hide_st_style, unsafe_allow_html=True)
 
 

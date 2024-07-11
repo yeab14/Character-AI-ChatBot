@@ -24,6 +24,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name)
 generator = pipeline("text-generation", model=model, tokenizer=tokenizer)
 
+# Pydantic models
 class ChatRequest(BaseModel):
     user_input: str
     character_id: str
@@ -44,9 +45,10 @@ class Character(CharacterBase):
     id: str
     avatar_url: Optional[str] = None
 
-# In-memory storage for characters
+# In-memory storage for characters (replace with database in production)
 characters_db = {}
 
+# Create character endpoint
 @app.post("/characters/", response_model=Character)
 async def create_character(character: CharacterCreate, avatar: UploadFile = File(...)):
     char_id = str(uuid.uuid4())
@@ -67,10 +69,12 @@ async def create_character(character: CharacterCreate, avatar: UploadFile = File
     characters_db[char_id] = new_character
     return new_character
 
+# List all characters endpoint
 @app.get("/characters/", response_model=List[Character])
 async def list_characters():
     return list(characters_db.values())
 
+# Get character by ID endpoint
 @app.get("/characters/{char_id}", response_model=Character)
 async def get_character(char_id: str):
     character = characters_db.get(char_id)
@@ -78,6 +82,7 @@ async def get_character(char_id: str):
         raise HTTPException(status_code=404, detail="Character not found")
     return character
 
+# Chat endpoint
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     user_input = request.user_input
@@ -94,8 +99,12 @@ async def chat(request: ChatRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# Entry point
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="localhost", port=8000)
+
+
+
 
 
