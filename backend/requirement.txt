@@ -1,0 +1,7 @@
+fastapi==0.95.2
+pydantic==1.10.2
+transformers==4.30.0
+torch==2.0.1  # Adjust this if you need a different version of PyTorch
+uvicorn==0.22.0
+
+
