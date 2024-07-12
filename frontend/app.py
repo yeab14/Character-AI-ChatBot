@@ -48,7 +48,7 @@ st.markdown(
         font-size: 24px;
         font-weight: bold;
         color: #fff;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
     }}
     .sidebar-content {{
         font-size: 16px;
@@ -146,18 +146,23 @@ st.sidebar.markdown(
 st.markdown('<div class="profile-info">', unsafe_allow_html=True)
 st.markdown(
     f"""
-    <div style="text-align: center;">
-        <img src="data:image/png;base64,{profile_image_base64}" class="profile-picture" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 10px;" />
-        <div class="profile-name" style="font-size: 24px; font-weight: bold; color: #000; margin-top: 10px; margin-bottom: 5px;">Zulekya</div>
-        <div class="profile-description" style="font-size: 16px; color: #000; text-align: center;">
-            Chat with an AI-powered character.<br>
-            Enter your messages below and get responses.<br>
-            Powered by Streamlit and FastAPI.
+    <div style="text-align: center; margin-top: -90px;">
+        <img src="data:image/png;base64,{profile_image_base64}" class="profile-picture" style="width: 130px; height: 130px; border-radius: 50%; margin-bottom: 5px; border: 5px solid #fff; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
+       <div class="profile-name" style="font-size: 24px; font-weight: bold; color: #333; margin-top: 20px; margin-bottom: 10px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: 1px; text-transform: uppercase;">
+            Hey&#x1F44B; , I'm Zulekya
+        </div>
+        <div class="profile-description" style="font-size: 17px; color: #555; text-align: center; font-family: 'var(--font-alpina)', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif; line-height: 1.6;">
+            Your personal AI companion here to support you with warmth, wisdom, and a touch of magic. <br>
+            Feel free to ask me anything – from advice to deep conversations or just to brighten your day!
         </div>
     </div>
     """,
     unsafe_allow_html=True,
 )
+
+
+
+
 
 st.markdown('</div>', unsafe_allow_html=True)
 
