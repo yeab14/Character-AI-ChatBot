@@ -5,60 +5,81 @@ import requests
 st.markdown(
     """
     <style>
-    .stTextInput textarea {
+    body {
         background-color: #1e1e1e;
         color: white;
+    }
+    .stTextInput textarea {
+        background-color: #2e2e2e;
+        color: #e5e5e5;
         font-family: 'Courier New', Courier, monospace;
+        border: 1px solid #007BFF;
     }
     .stButton button {
         background-color: #007BFF;
         color: white;
-        border-radius: 5px;
+        border-radius: 25px;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
         transition: background-color 0.3s ease;
     }
     .stButton button:hover {
         background-color: #0056b3;
     }
     .sidebar {
-        background-color: #f0f0f0;
+        background-color: #2e2e2e;
         padding: 20px;
         margin-right: 10px;
         border-radius: 10px;
     }
     .sidebar-header {
-        font-size: 20px;
+        font-size: 24px;
         font-weight: bold;
+        color: #007BFF;
         margin-bottom: 10px;
     }
     .sidebar-content {
         font-size: 16px;
         line-height: 1.6;
+        color: #e5e5e5;
     }
     .chat-container {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        max-height: 70vh;
+        overflow-y: auto;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #2e2e2e;
+        margin-top: 10px;
+    }
+    .chat-message, .chat-response {
+        padding: 10px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        max-width: 70%;
+        font-size: 16px;
     }
     .chat-message {
         background-color: #007BFF;
         color: white;
-        padding: 10px;
-        border-radius: 10px;
-        margin-bottom: 10px;
         align-self: flex-start;
-        max-width: 70%;
     }
     .chat-response {
         background-color: #333;
         color: white;
-        padding: 10px;
-        border-radius: 10px;
-        margin-bottom: 10px;
         align-self: flex-end;
-        max-width: 70%;
     }
     footer {
         visibility: visible;
+        text-align: center;
+        padding: 20px;
+        background-color: #2e2e2e;
+        color: #e5e5e5;
+        border-top: 1px solid #007BFF;
     }
     </style>
     """,
@@ -73,11 +94,11 @@ if 'chat_history' not in st.session_state:
 st.sidebar.markdown(
     """
     <div class="sidebar">
-        <div class="sidebar-header">ChatGPT</div>
+        <div class="sidebar-header">Roleplay Chatbot</div>
         <div class="sidebar-content">
             Chat with an AI-powered character.<br><br>
-            Enter your messages in the field on the left.<br>
-            The AI will respond on the right.<br><br>
+            Enter your messages in the field below.<br>
+            The AI will respond to your inputs.<br><br>
             Powered by Streamlit and FastAPI.
         </div>
     </div>
@@ -88,7 +109,7 @@ st.sidebar.markdown(
 # Main content
 st.title("Roleplay Chatbot")
 
-user_input = st.text_area("Enter your message here...")
+user_input = st.text_area("Enter your message here...", height=100)
 
 # Character ID selection (optional based on your implementation)
 character_id = "default_character_id"  # Replace with actual logic to get character ID
@@ -130,6 +151,8 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+
 
 
 
