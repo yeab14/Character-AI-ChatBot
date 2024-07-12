@@ -1,86 +1,96 @@
 import streamlit as st
 import requests
+import time
+import base64
+
+def get_base64_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode()
+
+# Get base64 string for the profile image
+profile_image_base64 = get_base64_image("profile.png")
 
 # Custom CSS for styling
 st.markdown(
-    """
+    f"""
     <style>
-    body {
+    body {{
+        background-color: #000;
+        color: #fff;
+    }}
+    .stTextInput textarea {{
         background-color: #1e1e1e;
-        color: white;
-    }
-    .stTextInput textarea {
-        background-color: #2e2e2e;
-        color: #e5e5e5;
+        color: #fff;
         font-family: 'Courier New', Courier, monospace;
-        border: 1px solid #007BFF;
-    }
-    .stButton button {
-        background-color: #007BFF;
-        color: white;
+        border: 1px solid #fff;
+    }}
+    .stButton button {{
+        background-color: #fff;
+        color: #000;
         border-radius: 25px;
         border: none;
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
         transition: background-color 0.3s ease;
-    }
-    .stButton button:hover {
-        background-color: #0056b3;
-    }
-    .sidebar {
-        background-color: #2e2e2e;
+    }}
+    .stButton button:hover {{
+        background-color: #007BFF;
+        color: #fff;
+    }}
+    .sidebar {{
+        background-color: #1e1e1e;
         padding: 20px;
         margin-right: 10px;
         border-radius: 10px;
-    }
-    .sidebar-header {
+    }}
+    .sidebar-header {{
         font-size: 24px;
         font-weight: bold;
-        color: #007BFF;
+        color: #fff;
         margin-bottom: 10px;
-    }
-    .sidebar-content {
+    }}
+    .sidebar-content {{
         font-size: 16px;
         line-height: 1.6;
-        color: #e5e5e5;
-    }
-    .chat-container {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        max-height: 70vh;
-        overflow-y: auto;
-        padding: 10px;
-        border-radius: 10px;
-        background-color: #2e2e2e;
-        margin-top: 10px;
-    }
-    .chat-message, .chat-response {
+        color: #fff;
+    }}
+    .chat-message, .chat-response {{
         padding: 10px;
         border-radius: 10px;
         margin-bottom: 10px;
         max-width: 70%;
         font-size: 16px;
-    }
-    .chat-message {
+        display: flex;
+        align-items: center;
+    }}
+    .chat-message {{
         background-color: #007BFF;
         color: white;
         align-self: flex-start;
-    }
-    .chat-response {
+    }}
+    .chat-response {{
         background-color: #333;
         color: white;
         align-self: flex-end;
-    }
-    footer {
+    }}
+    .profile-picture {{
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }}
+    .chat-text {{
+        flex-grow: 1;
+    }}
+    footer {{
         visibility: visible;
         text-align: center;
         padding: 20px;
-        background-color: #2e2e2e;
-        color: #e5e5e5;
-        border-top: 1px solid #007BFF;
-    }
+        background-color: #1e1e1e;
+        color: #fff;
+        border-top: 1px solid #fff;
+    }}
     </style>
     """,
     unsafe_allow_html=True,
@@ -88,7 +98,7 @@ st.markdown(
 
 # Initialize chat history
 if 'chat_history' not in st.session_state:
-    st.session_state['chat_history'] = []
+    st.session_state['chat_history'] = [("Bot", "Hello! How can I assist you today?")]
 
 # Sidebar content
 st.sidebar.markdown(
@@ -109,10 +119,35 @@ st.sidebar.markdown(
 # Main content
 st.title("Roleplay Chatbot")
 
-user_input = st.text_area("Enter your message here...", height=100)
-
 # Character ID selection (optional based on your implementation)
 character_id = "default_character_id"  # Replace with actual logic to get character ID
+
+st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+for sender, message_text in st.session_state['chat_history']:
+    if sender == "You":
+        st.markdown(
+            f'''
+            <div class="chat-message">
+                <img src="https://via.placeholder.com/40" class="profile-picture" />
+                <div class="chat-text">{message_text}</div>
+            </div>
+            ''',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            f'''
+            <div class="chat-response">
+                <img src="data:image/png;base64,{profile_image_base64}" class="profile-picture" />
+                <div class="chat-text">{message_text}</div>
+            </div>
+            ''',
+            unsafe_allow_html=True,
+        )
+        time.sleep(2)  # Time-elapsed effect for bot messages
+st.markdown('</div>', unsafe_allow_html=True)
+
+user_input = st.text_area("Enter your message here...", height=100)
 
 if st.button("Send"):
     if user_input:
@@ -133,15 +168,6 @@ if st.button("Send"):
     else:
         st.warning("Please enter a message.")
 
-# Display chat history
-st.markdown('<div class="chat-container">', unsafe_allow_html=True)
-for sender, message_text in st.session_state['chat_history']:
-    if sender == "You":
-        st.markdown(f'<div class="chat-message">{message_text}</div>', unsafe_allow_html=True)
-    else:
-        st.markdown(f'<div class="chat-response">{message_text}</div>', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
-
 # Footer
 st.markdown(
     """
@@ -151,6 +177,10 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+
+
+
 
 
 
