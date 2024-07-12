@@ -17,22 +17,43 @@ st.markdown(
         background-color: var(--body-bg);
         color: var(--text-color);
     }}
-    .stTextInput textarea {{
+   .stTextInput textarea {{
         background-color: var(--input-bg);
         color: var(--text-color);
         font-family: 'Courier New', Courier, monospace;
         border: 1px solid var(--text-color);
+        resize: vertical; /* Enable vertical resizing */
+        min-height: 50px; /* Minimum height */
+        padding: 10px; /* Adjust padding */
+    }}
+    .stTextInput textarea:focus {{
+        border-color: #007BFF; /* Highlight border color on focus */
+    }}
+    .stTextInput .stTextareaWrapper {{
+        position: relative;
+    }}
+    .stTextInput .stTextareaWrapper .icon {{
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
     }}
     .stButton button {{
         background-color: var(--btn-bg);
         color: var(--btn-text);
-        border-radius: 25px;
+        border-radius: 5px;
         border: none;
-        padding: 10px 20px;
-        font-size: 16px;
+        padding: 12px 24px;
+        font-size: 20px;
         cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 300px; /* Limit maximum width */
+        margin: 10px auto; /* Center align horizontally */
+        display: block; /* Ensure button is block level for full width */
+        text-align: center; /* Center align text */
     }}
     .stButton button:hover {{
         background-color: var(--btn-hover-bg);
@@ -119,43 +140,16 @@ st.markdown(
         text-transform: uppercase;
         margin-bottom: 10px;
     }}
-
-     .sidebar .sidebar-content {{
+    .sidebar .sidebar-content {{
         font-size: 18px;
         color: #fff;
         text-align: center;
+        margin-bottom: 10px;
         font-family: 'var(--font-alpina)', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
         line-height: 1.6;
     }}
-
-    .stSidebar .sidebar-content .stButton {{
-        margin-top: 20px;
-    }}
-
-     .sidebar .stButton button {{
-    display: flex;
-    align-items: center;
-     text-align: center;
-    justify-content: center;
-    background-color: transparent;
-    color: #fff;
-    font-size: 18px;
-    border: none;
-    margin: 10px 0;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    }}
-
-    .sidebar .stButton button:hover {{
-    background-color: #555;
-    color: #fff;
-    border: 2px solid #fff;
-    cursor: pointer;
-    }}
-    .sidebar .stButton button i {{
-        margin-right: 10px;
-    }}
     </style>
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     """,
     unsafe_allow_html=True,
 )
@@ -168,11 +162,6 @@ st.markdown(
         --body-bg: #000;
         --text-color: #fff;
         --input-bg: #1e1e1e;
-        --btn-bg: #000;
-        --btn-text: #fff;
-        --btn-hover-bg: #fff;
-        --btn-hover-text: #000;
-        --btn-hover-border: #000;
         --footer-bg: #1e1e1e;
     }
     @media (prefers-color-scheme: light) {
@@ -180,18 +169,38 @@ st.markdown(
             --body-bg: #fff;
             --text-color: #000;
             --input-bg: #f1f1f1;
-            --btn-bg: #000;
-            --btn-text: #fff;
-            --btn-hover-bg: #fff;
-            --btn-hover-text: #000;
-            --btn-hover-border: #000;
             --footer-bg: #f1f1f1;
         }
+    }
+
+    .sidebar .stButton button {
+        display: inline-block;
+        width: 100%; /* Adjust width as needed */
+        text-align: left; /* Align text to the left */
+        background-color: transparent;
+        color: #fff;
+        font-size: 18px; /* Set the font size */
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        border: none;
+        padding: 15px 20px; /* Adjust padding for button size */
+        margin: 10px 0; /* Add margin for spacing */
+    }
+
+    .sidebar .stButton button:hover {
+        background-color: #555;
+        color: #fff;
+    }
+
+    .sidebar .stButton button i {
+        margin-right: 10px; /* Adjust icon margin */
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
+
 
 # Initialize chat history
 if 'chat_history' not in st.session_state:
