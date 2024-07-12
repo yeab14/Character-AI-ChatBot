@@ -24,19 +24,22 @@ st.markdown(
         border: 1px solid #fff;
     }}
     .stButton button {{
-        background-color: #000;
-        color: #fff;
-        border-radius: 25px;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
+    background-color: #000;
+    color: #fff;
+    border-radius: 25px;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Apply transition to all properties */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
     }}
     .stButton button:hover {{
-        background-color: #fff;
-        color: #000;
-        border: 1px solid #000;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+    transform: scale(1); /* Scale up on hover for a slight zoom effect */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Increase shadow intensity */
     }}
     .sidebar {{
         background-color: #1e1e1e;
@@ -151,9 +154,9 @@ st.markdown(
        <div class="profile-name" style="font-size: 24px; font-weight: bold; color: #333; margin-top: 20px; margin-bottom: 10px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: 1px; text-transform: uppercase;">
             Hey&#x1F44B; , I'm Zulekya
         </div>
-        <div class="profile-description" style="font-size: 17px; color: #555; text-align: center; font-family: 'var(--font-alpina)', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif; line-height: 1.6;">
-            Your personal AI companion here to support you with warmth, wisdom, and a touch of magic. <br>
-            Feel free to ask me anything – from advice to deep conversations or just to brighten your day!
+         <div class="profile-description" style="font-size: 16px; color: #555; text-align: center; font-family: 'var(--font-alpina)', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif; line-height: 1.6;">
+            Your personal AI companion here to support you with warmth, wisdom, and a touch of magic.<br>
+            Feel free to ask me anything – from advice to deep conversations or just to brighten your day 😊
         </div>
     </div>
     """,
