@@ -1,5 +1,4 @@
 import streamlit as st
-import requests
 import time
 import base64
 
@@ -25,8 +24,8 @@ st.markdown(
         border: 1px solid #fff;
     }}
     .stButton button {{
-        background-color: #fff;
-        color: #000;
+        background-color: #000;
+        color: #fff;
         border-radius: 25px;
         border: none;
         padding: 10px 20px;
@@ -35,8 +34,9 @@ st.markdown(
         transition: background-color 0.3s ease;
     }}
     .stButton button:hover {{
-        background-color: #007BFF;
-        color: #fff;
+        background-color: #fff;
+        color: #000;
+         border: 1px solid #000;
     }}
     .sidebar {{
         background-color: #1e1e1e;
@@ -89,7 +89,17 @@ st.markdown(
         padding: 20px;
         background-color: #1e1e1e;
         color: #fff;
+        margin-top: 200px; 
         border-top: 1px solid #fff;
+    }}
+    @keyframes typing {{
+        from {{ width: 0 }}
+        to {{ width: 100% }}
+    }}
+    .animation-text {{
+        overflow: hidden; /* Ensures the text is not visible until animation starts */
+        white-space: nowrap; /* Prevents text wrapping */
+        animation: typing 2s steps(20, end);
     }}
     </style>
     """,
@@ -98,7 +108,7 @@ st.markdown(
 
 # Initialize chat history
 if 'chat_history' not in st.session_state:
-    st.session_state['chat_history'] = [("Bot", "Hello! How can I assist you today?")]
+    st.session_state['chat_history'] = [("Bot", '<div class="animation-text">Hello! How can I assist you today?</div>')]
 
 # Sidebar content
 st.sidebar.markdown(
@@ -119,9 +129,7 @@ st.sidebar.markdown(
 # Main content
 st.title("Roleplay Chatbot")
 
-# Character ID selection (optional based on your implementation)
-character_id = "default_character_id"  # Replace with actual logic to get character ID
-
+# Chat history display
 st.markdown('<div class="chat-container">', unsafe_allow_html=True)
 for sender, message_text in st.session_state['chat_history']:
     if sender == "You":
@@ -144,26 +152,24 @@ for sender, message_text in st.session_state['chat_history']:
             ''',
             unsafe_allow_html=True,
         )
-        time.sleep(2)  # Time-elapsed effect for bot messages
+        time.sleep(2)  # Simulate time delay for bot response
 st.markdown('</div>', unsafe_allow_html=True)
 
+# User input area
 user_input = st.text_area("Enter your message here...", height=100)
 
+# Send button functionality
 if st.button("Send"):
     if user_input:
         with st.spinner("Generating response..."):
             try:
-                response = requests.post(
-                    "http://127.0.0.1:8000/chat",
-                    json={"user_input": user_input, "character_id": character_id}
-                )
-                if response.status_code == 200:
-                    response_text = response.json()["response"]
-                    st.session_state['chat_history'].append(("You", user_input))
-                    st.session_state['chat_history'].append(("Bot", response_text))
-                else:
-                    st.error("Error: " + str(response.status_code))
-            except requests.exceptions.RequestException as e:
+                # Simulate response from API
+                response_text = f"Bot responds to: '{user_input}'"
+                
+                # Update chat history
+                st.session_state['chat_history'].append(("You", user_input))
+                st.session_state['chat_history'].append(("Bot", response_text))
+            except Exception as e:
                 st.error(f"Error: {e}")
     else:
         st.warning("Please enter a message.")
