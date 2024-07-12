@@ -36,7 +36,7 @@ st.markdown(
     .stButton button:hover {{
         background-color: #fff;
         color: #000;
-         border: 1px solid #000;
+        border: 1px solid #000;
     }}
     .sidebar {{
         background-color: #1e1e1e;
@@ -80,8 +80,24 @@ st.markdown(
         border-radius: 50%;
         margin-right: 10px;
     }}
-    .chat-text {{
-        flex-grow: 1;
+    .profile-info {{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }}
+    .profile-name {{
+        font-size: 20px;
+        font-weight: bold;
+        color: #fff;
+        margin-top: 10px;
+    }}
+    .profile-description {{
+        font-size: 16px;
+        color: #fff;
+        text-align: center;
     }}
     footer {{
         visibility: visible;
@@ -89,7 +105,7 @@ st.markdown(
         padding: 20px;
         background-color: #1e1e1e;
         color: #fff;
-        margin-top: 200px; 
+        margin-top: 150px;
         border-top: 1px solid #fff;
     }}
     @keyframes typing {{
@@ -114,7 +130,7 @@ if 'chat_history' not in st.session_state:
 st.sidebar.markdown(
     """
     <div class="sidebar">
-        <div class="sidebar-header">Roleplay Chatbot</div>
+        <div class="sidebar-header">Zulekya</div>
         <div class="sidebar-content">
             Chat with an AI-powered character.<br><br>
             Enter your messages in the field below.<br>
@@ -126,11 +142,27 @@ st.sidebar.markdown(
     unsafe_allow_html=True,
 )
 
-# Main content
-st.title("Roleplay Chatbot")
+# Profile display centered at the top
+st.markdown('<div class="profile-info">', unsafe_allow_html=True)
+st.markdown(
+    f"""
+    <div style="text-align: center;">
+        <img src="data:image/png;base64,{profile_image_base64}" class="profile-picture" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 10px;" />
+        <div class="profile-name" style="font-size: 24px; font-weight: bold; color: #000; margin-top: 10px; margin-bottom: 5px;">Zulekya</div>
+        <div class="profile-description" style="font-size: 16px; color: #000; text-align: center;">
+            Chat with an AI-powered character.<br>
+            Enter your messages below and get responses.<br>
+            Powered by Streamlit and FastAPI.
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
-# Chat history display
-st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Chat history display with margin
+st.markdown('<div class="chat-container" style="margin-top: 50px;">', unsafe_allow_html=True)
 for sender, message_text in st.session_state['chat_history']:
     if sender == "You":
         st.markdown(
@@ -183,6 +215,9 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+
+
 
 
 
