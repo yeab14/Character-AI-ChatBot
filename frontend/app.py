@@ -1,10 +1,37 @@
 import streamlit as st
 import time
 import base64
+import requests
+
+API_URL = "http://185.124.109.231:9000" 
 
 def get_base64_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode()
+
+def list_characters():
+    response = requests.get(f"{API_URL}/characters/")
+    if response.status_code == 200:
+        return response.json()
+    else:
+        st.error("Failed to load characters.")
+        return []
+
+def get_character(char_id):
+    response = requests.get(f"{API_URL}/characters/{char_id}")
+    if response.status_code == 200:
+        return response.json()
+    else:
+        st.error("Character not found.")
+        return None
+
+def chat_with_character(user_input, character_id):
+    response = requests.post(f"{API_URL}/chat", json={"user_input": user_input, "character_id": character_id})
+    if response.status_code == 200:
+        return response.json()['response']
+    else:
+        st.error("Failed to get response from the character.")
+        return ""
 
 # Get base64 string for the profile image
 profile_image_base64 = get_base64_image("profile.png")
@@ -17,28 +44,44 @@ st.markdown(
         background-color: var(--body-bg);
         color: var(--text-color);
     }}
-   .stTextInput textarea {{
-        background-color: var(--input-bg);
-        color: var(--text-color);
-        font-family: 'Courier New', Courier, monospace;
-        border: 1px solid var(--text-color);
-        resize: vertical; /* Enable vertical resizing */
-        min-height: 50px; /* Minimum height */
-        padding: 10px; /* Adjust padding */
+    .stTextInput textarea {{
+         background-color: var(--input-bg);
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    border: 1px solid var(--text-color);
+    resize: none;
+    min-height: 30px; /* Decreased initial height */
+    padding: 10px;
+    width: 100%;
+    transition: width 0.3s ease-in-out, min-height 0.3s ease;
     }}
     .stTextInput textarea:focus {{
-        border-color: #007BFF; /* Highlight border color on focus */
+        border-color: #007BFF;
+    width: calc(100% - 80px); /* Adjust based on the size of the send button */
+    min-height: 50px; /* Increase height on focus */
     }}
     .stTextInput .stTextareaWrapper {{
         position: relative;
     }}
     .stTextInput .stTextareaWrapper .icon {{
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        cursor: pointer;
+       position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
     }}
+
+    
     .stButton button {{
         background-color: var(--btn-bg);
         color: var(--btn-text);
@@ -134,7 +177,7 @@ st.markdown(
         font-size: 20px;
         font-weight: bold;
         text-align: center;
-        color: #fff;
+        color: var(--text-color);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         letter-spacing: 2px;
         text-transform: uppercase;
@@ -142,7 +185,7 @@ st.markdown(
     }}
     .sidebar .sidebar-content {{
         font-size: 18px;
-        color: #fff;
+        color: var(--text-color);
         text-align: center;
         margin-bottom: 10px;
         font-family: 'var(--font-alpina)', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
@@ -154,52 +197,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Set theme variables
-st.markdown(
-    """
-    <style>
-    :root {
-        --body-bg: #000;
-        --text-color: #fff;
-        --input-bg: #1e1e1e;
-        --footer-bg: #1e1e1e;
-    }
-    @media (prefers-color-scheme: light) {
-        :root {
-            --body-bg: #fff;
-            --text-color: #000;
-            --input-bg: #f1f1f1;
-            --footer-bg: #f1f1f1;
-        }
-    }
-
-    .sidebar .stButton button {
-        display: inline-block;
-        width: 100%; /* Adjust width as needed */
-        text-align: left; /* Align text to the left */
-        background-color: transparent;
-        color: #fff;
-        font-size: 18px; /* Set the font size */
-        text-decoration: none;
-        cursor: pointer;
-        transition: background-color 0.3s ease, color 0.3s ease;
-        border: none;
-        padding: 15px 20px; /* Adjust padding for button size */
-        margin: 10px 0; /* Add margin for spacing */
-    }
-
-    .sidebar .stButton button:hover {
-        background-color: #555;
-        color: #fff;
-    }
-
-    .sidebar .stButton button i {
-        margin-right: 10px; /* Adjust icon margin */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
 
 
 # Initialize chat history
@@ -267,33 +264,24 @@ for sender, message_text in st.session_state['chat_history']:
             ''',
             unsafe_allow_html=True,
         )
-        time.sleep(2)  # Simulate time delay for bot response
+
 st.markdown('</div>', unsafe_allow_html=True)
 
-# User input area
-user_input = st.text_area("Enter your message here...", height=100)
+# Text input with dynamic sizing and send button as arrow-up icon
+user_input = st.text_area("Type your message here...", key="user_input", height=None, max_chars=None)
 
-# Send button functionality
-if st.button("Send"):
-    if user_input:
-        with st.spinner("Generating response..."):
-            try:
-                # Simulate response from API
-                response_text = f"Bot responds to: '{user_input}'"
-                
-                # Update chat history
-                st.session_state['chat_history'].append(("You", user_input))
-                st.session_state['chat_history'].append(("Bot", response_text))
-            except Exception as e:
-                st.error(f"Error: {e}")
-    else:
-        st.warning("Please enter a message.")
+if st.button("", key="send_button", help="Send message", on_click=None, args=None, kwargs=None):
+    st.session_state['chat_history'].append(("You", user_input))
+    bot_response = chat_with_character(user_input, character_id)  # Assuming `character_id` is defined somewhere
+    st.session_state['chat_history'].append(("Bot", bot_response))
+
+
 
 # Footer
 st.markdown(
     """
     <footer>
-    <p>Developed by Yeabsira Dereje. Powered by Streamlit and FastAPI.</p>
+        <p>&copy; 2024 Zulekya Chatbot. All rights reserved.</p>
     </footer>
     """,
     unsafe_allow_html=True,
