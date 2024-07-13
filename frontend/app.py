@@ -48,9 +48,9 @@ st.markdown(
         background-color: var(--input-bg);
         color: var(--text-color);
         font-family: 'Courier New', Courier, monospace;
-        border: 1px solid var(--text-color);
+        border: 1=5px solid var(--text-color);
         resize: none;
-        min-height: 30px; /* Decreased initial height */
+        height: 30px;
         padding: 10px;
         width: calc(100% - 60px); /* Adjust width to accommodate send button */
         transition: width 0.3s ease-in-out, min-height 0.3s ease;
@@ -91,7 +91,7 @@ st.markdown(
 
     .send-button {{
         position: absolute;
-        top: -95px;
+        top: -80px;
         right: 10px;
         transform: translateY(-50%);
         background-color: #000;
@@ -274,7 +274,7 @@ st.markdown('</div>', unsafe_allow_html=True)
 
 # Text input with dynamic sizing and send button as arrow-up icon
 st.markdown('<div class="stTextareaWrapper">', unsafe_allow_html=True)
-user_input = st.text_area("Type your message here...", key="user_input", height=None, max_chars=None)
+user_input = st.text_area("", key="user_input", height=None, max_chars=None)
 
 send_button_html = """
 <button class="send-button" onclick="sendMessage()">
@@ -302,10 +302,9 @@ st.markdown(send_button_js, unsafe_allow_html=True)
 # Footer
 st.markdown(
     """
-  <footer>
-    <p>&copy; 2024 Zulekya Chatbot. All rights reserved. Developed by Yeabsira Dereje.</p>
-</footer>
-
+    <footer>
+        <p>&copy; 2024 Zulekya Chatbot. All rights reserved.</p>
+    </footer>
     """,
     unsafe_allow_html=True,
 )
