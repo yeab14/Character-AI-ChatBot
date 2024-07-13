@@ -45,40 +45,23 @@ st.markdown(
         color: var(--text-color);
     }}
     .stTextInput textarea {{
-         background-color: var(--input-bg);
-    color: var(--text-color);
-    font-family: 'Courier New', Courier, monospace;
-    border: 1px solid var(--text-color);
-    resize: none;
-    min-height: 30px; /* Decreased initial height */
-    padding: 10px;
-    width: 100%;
-    transition: width 0.3s ease-in-out, min-height 0.3s ease;
+        background-color: var(--input-bg);
+        color: var(--text-color);
+        font-family: 'Courier New', Courier, monospace;
+        border: 1px solid var(--text-color);
+        resize: none;
+        min-height: 30px; /* Decreased initial height */
+        padding: 10px;
+        width: calc(100% - 60px); /* Adjust width to accommodate send button */
+        transition: width 0.3s ease-in-out, min-height 0.3s ease;
     }}
     .stTextInput textarea:focus {{
         border-color: #007BFF;
-    width: calc(100% - 80px); /* Adjust based on the size of the send button */
-    min-height: 50px; /* Increase height on focus */
+        width: calc(100% - 60px); /* Maintain adjusted width on focus */
+        min-height: 50px; /* Increase height on focus */
     }}
     .stTextInput .stTextareaWrapper {{
         position: relative;
-    }}
-    .stTextInput .stTextareaWrapper .icon {{
-       position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--btn-bg);
-    color: var(--btn-text);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
     }}
 
     
@@ -104,6 +87,28 @@ st.markdown(
         border: 1px solid var(--btn-hover-border);
         transform: scale(1.05);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }}
+
+    .send-button {{
+        position: absolute;
+        top: -95px;
+        right: 10px;
+        transform: translateY(-50%);
+        background-color: #000;
+        color: #fff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }}
+    .send-button:hover {{
+        background-color: #333;
     }}
     .chat-message, .chat-response {{
         padding: 10px;
@@ -268,21 +273,39 @@ for sender, message_text in st.session_state['chat_history']:
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Text input with dynamic sizing and send button as arrow-up icon
+st.markdown('<div class="stTextareaWrapper">', unsafe_allow_html=True)
 user_input = st.text_area("Type your message here...", key="user_input", height=None, max_chars=None)
 
-if st.button("", key="send_button", help="Send message", on_click=None, args=None, kwargs=None):
-    st.session_state['chat_history'].append(("You", user_input))
-    bot_response = chat_with_character(user_input, character_id)  # Assuming `character_id` is defined somewhere
-    st.session_state['chat_history'].append(("Bot", bot_response))
+send_button_html = """
+<button class="send-button" onclick="sendMessage()">
+    <i class="fas fa-arrow-up"></i>
+</button>
+"""
 
+st.markdown(send_button_html, unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
+# JavaScript to handle send button click
+send_button_js = """
+<script>
+function sendMessage() {
+    const userInput = document.querySelector('textarea[aria-label="Type your message here..."]');
+    if (userInput.value.trim() !== "") {
+        userInput.form.submit();
+    }
+}
+</script>
+"""
+
+st.markdown(send_button_js, unsafe_allow_html=True)
 
 # Footer
 st.markdown(
     """
-    <footer>
-        <p>&copy; 2024 Zulekya Chatbot. All rights reserved.</p>
-    </footer>
+  <footer>
+    <p>&copy; 2024 Zulekya Chatbot. All rights reserved. Developed by Yeabsira Dereje.</p>
+</footer>
+
     """,
     unsafe_allow_html=True,
 )
