@@ -46,27 +46,6 @@ st.markdown(
         background-color: var(--body-bg);
         color: var(--text-color);
     }}
-    .stTextInput textarea {{
-        background-color: var(--input-bg);
-        color: var(--text-color);
-        font-family: 'Courier New', Courier, monospace;
-        border: 1=5px solid var(--text-color);
-        resize: none;
-        height: 30px;
-        padding: 10px;
-        width: calc(100% - 60px); 
-        transition: width 0.3s ease-in-out, min-height 0.3s ease;
-    }}
-    .stTextInput textarea:focus {{
-        border-color: #007BFF;
-        width: calc(100% - 60px); /* Maintain adjusted width on focus */
-        min-height: 50px; /* Increase height on focus */
-    }}
-    .stTextInput .stTextareaWrapper {{
-        position: relative;
-    }}
-
-    
     .stButton button {{
         background-color: var(--btn-bg);
         color: var(--btn-text);
@@ -90,11 +69,50 @@ st.markdown(
         transform: scale(1.05);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     }}
+    .stTextInput {{
+        display: flex;
+        align-items: center;
+        width: 10%;
+        color: #000;
+    }}
+    .stTextInput textarea {{
+        height: 40px; /* Initial height */
+        min-height: 40px;
+        max-height: 120px; /* Maximum height */
+        width: calc(100% - 70px); /* Adjust width */
+        background-color: #f2f2f2; /* Light gray background */
+        color: #333; /* Dark text color */
+        font-size: 16px;
+        font-family: 'Arial', sans-serif;
+        border: none;
+        border-radius: 8px; /* Rounded corners */
+        padding: 12px; /* Padding inside */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
+        resize: none; /* Prevent resizing */
+        transition: height 0.3s ease-in-out; /* Smooth height transition */
+    }}
+
+    /* Focus state */
+    .stTextInput textarea:focus {{
+        outline: none; /* Remove default focus outline */
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3); /* Blue focus border */
+    }}
+
+    /* Placeholder text style */
+    .stTextInput textarea::placeholder {{
+        color: #999; /* Light gray placeholder text */
+        font-style: italic; /* Italic placeholder */
+    }}
+
+    /* Hover effect */
+    .stTextInput textarea:hover {{
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slight shadow on hover */
+    }}
 
     .send-button {{
         position: absolute;
-        top: -80px;
-        right: 10px;
+        top: -65px;
+        right: -60px;
         transform: translateY(-50%);
         background-color: #000;
         color: #fff;
@@ -274,16 +292,17 @@ for sender, message_text in st.session_state['chat_history']:
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Text input with dynamic sizing and send button as arrow-up icon
-st.markdown('<div class="stTextareaWrapper">', unsafe_allow_html=True)
-user_input = st.text_area("", key="user_input", height=None, max_chars=None)
+
+
+# Text area with inline style
+user_input = st.text_area("", key="user_input", height=10, max_chars=None, placeholder="Type your message here...",
+                          help="Use Enter or the Send button to submit.")
 
 send_button_html = """
 <button class="send-button" onclick="sendMessage()">
     <i class="fas fa-arrow-up"></i>
 </button>
 """
-
 st.markdown(send_button_html, unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
