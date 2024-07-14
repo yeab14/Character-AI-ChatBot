@@ -52,7 +52,7 @@ st.markdown(
         resize: none;
         height: 30px;
         padding: 10px;
-        width: calc(100% - 60px); /* Adjust width to accommodate send button */
+        width: calc(100% - 60px); 
         transition: width 0.3s ease-in-out, min-height 0.3s ease;
     }}
     .stTextInput textarea:focus {{
