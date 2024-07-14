@@ -2,8 +2,10 @@ import streamlit as st
 import time
 import base64
 import requests
+import datetime 
 
 API_URL = "http://185.124.109.231:9000" 
+current_year = str(datetime.datetime.now().year)
 
 def get_base64_image(image_path):
     with open(image_path, "rb") as image_file:
@@ -295,20 +297,25 @@ function sendMessage() {
     }
 }
 </script>
+<script>
+   
+    const currentYear = new Date().getFullYear();
+    document.getElementById("currentYear").textContent = currentYear;
+</script>
 """
 
 st.markdown(send_button_js, unsafe_allow_html=True)
 
+
 # Footer
 st.markdown(
-    """
+    f"""
     <footer>
-        <p>&copy; 2024 Zulekya Chatbot. All rights reserved.</p>
+        <p>&copy; {current_year} Zulekya Chatbot, Developed by Yeabsira Dereje. All rights reserved.</p>
     </footer>
     """,
     unsafe_allow_html=True,
 )
-
 
 
 
