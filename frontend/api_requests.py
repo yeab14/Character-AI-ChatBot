@@ -1,8 +1,7 @@
 import requests
-from datetime import datetime
+import streamlit as st
 
-API_URL = "http://185.124.109.231:9000" 
-current_year = str(datetime.now().year)
+API_URL = "http://185.124.109.231:9000"
 
 def list_characters():
     response = requests.get(f"{API_URL}/characters/")
@@ -27,3 +26,4 @@ def chat_with_character(user_input, character_id):
     else:
         st.error("Failed to get response from the character.")
         return ""
+
