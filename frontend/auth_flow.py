@@ -1,5 +1,3 @@
-# auth_flow.py
-
 import streamlit as st
 import auth
 from app import main_app
@@ -33,7 +31,10 @@ def registration_flow():
             st.error("Passwords do not match.")
 
 # Redirect to main app if user is logged in
-if 'user_logged_in' not in st.session_state or not st.session_state.user_logged_in:
+if 'user_logged_in' not in st.session_state:
+    st.session_state.user_logged_in = False
+
+if not st.session_state.user_logged_in:
     option = st.radio("Choose an option:", ("Login", "Register"))
     if option == "Login":
         login_flow()
