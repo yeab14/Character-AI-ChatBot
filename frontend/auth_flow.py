@@ -1,6 +1,7 @@
 import streamlit as st
 import auth
 from app import main_app
+
 # Function to add background image from URL
 def add_bg_from_url(image_url):
     st.markdown(
@@ -40,7 +41,7 @@ def add_bg_from_url(image_url):
         .description {{
             text-align: justify; /* Justified text alignment */
             margin-left: -300px; /* Adjust as needed */
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             font-size: 25px; /* Larger text */
             font-family: 'Playfair Display', serif; /* Elegant serif font */
             color: #fff; /* White text */
@@ -103,57 +104,38 @@ def add_bg_from_url(image_url):
         a:hover {{
             color: #3e8e41;
         }}
-
-        .checkbox-container {{
-            display: flex;
+        .stRadio > div {{
+            flex-direction: row;
+             margin-left: -650px;
             justify-content: center;
-            align-items: center;
-            gap: 40px;
+            margin-top: -50px;
+            font-size: 25px; /* Larger text */
+            font-family: 'Playfair Display', serif; /* Elegant serif font */
+            color: #fff; /* White text */
+            letter-spacing: 0.5px; /* Slight letter spacing */
+            line-height: 1.5; /* Increased line height for readability */
+            text-shadow: 1px 1px 2px rgba(0,0,0,1); /* Text shadow for depth */
+            animation: fade-in 1s ease-out; /* Fade-in animation */
         }}
-        .stCheckbox > div {{
+        .stRadio > div > label {{
             display: flex;
             align-items: center;
-            background-color: #000;
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 20px;
+            margin-right: 20px;
+            font-size: 25px; /* Larger text */
+            font-family: 'Playfair Display', serif; /* Elegant serif font */
+            color: #fff; /* White text */
+            letter-spacing: 0.5px; /* Slight letter spacing */
+            line-height: 1.5; /* Increased line height for readability */
+            text-shadow: 1px 1px 2px rgba(0,0,0,1); /* Text shadow for depth */
+            animation: fade-in 1s ease-out; /* Fade-in animation */
         }}
-        .stCheckbox > div > label {{
-            color: #fff !important;
-            font-size: 20px;
-            margin: 0 10px;
+        .stRadio > div > label:hover {{
+            color: #ccc;
         }}
-        .stCheckbox input[type="checkbox"] {{
-            accent-color: #fff;
-            transform: scale(1.5);
+        .stRadio > div > label > input {{
             margin-right: 10px;
         }}
-
-
         </style>
-
-        <script>
-        function scrollToSection(sectionId) {{
-            document.getElementById(sectionId).scrollIntoView({{ behavior: 'smooth' }});
-        }}
-
-        document.addEventListener('DOMContentLoaded', function () {{
-            const loginCheckbox = document.getElementById('login_checkbox');
-            const registerCheckbox = document.getElementById('register_checkbox');
-
-            loginCheckbox.addEventListener('change', function () {{
-                if (loginCheckbox.checked) {{
-                    scrollToSection('login_section');
-                }}
-            }});
-
-            registerCheckbox.addEventListener('change', function () {{
-                if (registerCheckbox.checked) {{
-                    scrollToSection('registration_section');
-                }}
-            }});
-        }});
-        </script>
         """,
         unsafe_allow_html=True
     )
@@ -238,6 +220,7 @@ if not st.session_state.user_logged_in:
     elif option == "Register":
         st.markdown('<div id="register_section"></div>', unsafe_allow_html=True)  # Anchor for registration section
         registration_flow()
+    st.markdown('</div>', unsafe_allow_html=True)
 else:
     main_app()
 
