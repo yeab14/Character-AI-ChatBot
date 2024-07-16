@@ -77,6 +77,21 @@ def add_bg_from_url(image_url):
             text-align: center;
             font-size: 18px; /* Larger button text */
         }}
+        .login-button, .register-button {{
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #444;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        text-align: center;
+        font-size: 18px; /* Larger button text */
+    }}
+    .login-button:hover, .register-button:hover {{
+        background-color: #555;
+    }}
         .button:hover {{
             background-color: #555;
         }}
@@ -188,7 +203,7 @@ def registration_flow():
     password = st.text_input("Password", type="password", key="register_password", max_chars=20)
     confirm_password = st.text_input("Confirm Password", type="password", key="confirm_password", max_chars=20)
     st.markdown('<div style="text-align: center; margin-bottom: 10px;">', unsafe_allow_html=True)
-    if st.button("Register"):
+    if st.button("Register", class_="register-button"):
         if password == confirm_password:
             if auth.register(username, password):
                 st.markdown('<div class="message success">Registered successfully!</div>', unsafe_allow_html=True)
