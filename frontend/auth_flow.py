@@ -1,6 +1,7 @@
 import streamlit as st
 import auth
 from app import main_app
+from characters import main
 
 # Function to add background image from URL
 def add_bg_from_url(image_url):
@@ -215,7 +216,7 @@ def registration_flow():
             st.markdown('<div class="message error">Passwords do not match.</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Redirect to main app if user is logged in
+# Redirect to characters app if user is logged in
 if 'user_logged_in' not in st.session_state:
     st.session_state.user_logged_in = False
 
@@ -237,7 +238,7 @@ if not st.session_state.user_logged_in:
         registration_flow()
     st.markdown('</div>', unsafe_allow_html=True)
 else:
-    main_app()
+    main()  # Redirect to characters.py when logged in
 
 
 
