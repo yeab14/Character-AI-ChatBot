@@ -12,26 +12,18 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import BoxedLayout from "../../core/components/BoxedLayout";
 import { useSnackbar } from "../../core/contexts/SnackbarProvider";
-import { useAuth } from "../contexts/AuthProvider";
+import { useLogin } from "../hooks/useLogin";
 
 const Login = () => {
-  const { isLoggingIn, login } = useAuth();
+  const { isLoggingIn, login } = useLogin();
   const navigate = useNavigate();
   const snackbar = useSnackbar();
   const { t } = useTranslation();
 
-  const handleLogin = (email: string, password: string) => {
-    login(email, password)
-      .then(() =>
-        navigate(`/${process.env.PUBLIC_URL}/admin`, { replace: true })
-      )
-      .catch(() => snackbar.error(t("common.errors.unexpected.subTitle")));
-  };
-
   const formik = useFormik({
     initialValues: {
-      email: "demo@example.com",
-      password: "guWEK<'r/-47-XG3",
+      email: "",
+      password: "",
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -41,7 +33,15 @@ const Login = () => {
         .min(8, t("common.validations.min", { size: 8 }))
         .required(t("common.validations.required")),
     }),
-    onSubmit: (values) => handleLogin(values.email, values.password),
+    onSubmit: async (values) => {
+      try {
+        await login(values);
+        snackbar.success(t("auth.login.notifications.success"));
+        navigate("/admin", { replace: true }); // Ensure correct navigation
+      } catch (error) {
+        snackbar.error(t("common.errors.unexpected.subTitle"));
+      }
+    },
   });
 
   return (
@@ -102,10 +102,10 @@ const Login = () => {
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
             />
-            <Box sx={{ textAlign: "right" }}>
+            <Box sx={{ textAlign: "right", mt: 1 }}>
               <Link
                 component={RouterLink}
-                to={`/${process.env.PUBLIC_URL}/forgot-password`}
+                to="/forgot-password"
                 variant="body2"
               >
                 {t("auth.login.forgotPasswordLink")}
@@ -116,13 +116,14 @@ const Login = () => {
               fullWidth
               loading={isLoggingIn}
               variant="contained"
+              color="primary"
               sx={{ mt: 3 }}
             >
               {t("auth.login.submit")}
             </LoadingButton>
             <Button
               component={RouterLink}
-              to={`/${process.env.PUBLIC_URL}/register`}
+              to="/register"
               color="primary"
               fullWidth
               sx={{ mt: 2 }}
@@ -137,3 +138,4 @@ const Login = () => {
 };
 
 export default Login;
+

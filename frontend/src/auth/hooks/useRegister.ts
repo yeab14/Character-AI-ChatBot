@@ -1,25 +1,18 @@
-import { useState } from "react";
 import axios from "axios";
-import { UserInfo } from "../types/userInfo"; // Adjust the import path as necessary
+import { useMutation } from "react-query";
+import { RegisterInfo } from "../types/registerInfo";
 
-const useRegister = () => {
-  const [isRegistering, setIsRegistering] = useState(false);
-
-  const register = async (userInfo: UserInfo) => {
-    setIsRegistering(true);
-    try {
-      const response = await axios.post("/api/register", userInfo);
-      return response.data;
-    } catch (error) {
-      console.error("Registration failed:", error);
-      throw error;
-    } finally {
-      setIsRegistering(false);
-    }
-  };
-
-  return { isRegistering, register };
+const register = async (userInfo: RegisterInfo): Promise<RegisterInfo> => {
+  try {
+    const { data } = await axios.post("/api/register", userInfo);
+    return data;
+  } catch (error) {
+    // Handle error in registration
+    throw new Error(error.response?.data?.message || "Registration failed");
+  }
 };
 
-export default useRegister;
-
+export function useRegister() {
+  const { isLoading, mutateAsync } = useMutation(register);
+  return { isRegistering: isLoading, register: mutateAsync };
+}
