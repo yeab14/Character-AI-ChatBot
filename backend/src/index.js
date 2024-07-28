@@ -1,7 +1,7 @@
 // src/index.js
 const express = require('express');
 const dotenv = require('dotenv');
-const connectDB = require('../utils/database');
+const connectDB = require('./utils/database');
 const authRoutes = require('./routes/authRoutes');
 
 dotenv.config();
