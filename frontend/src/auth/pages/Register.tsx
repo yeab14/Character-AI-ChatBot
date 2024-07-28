@@ -1,20 +1,23 @@
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormLabel from "@material-ui/core/FormLabel";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import LoadingButton from "@material-ui/lab/LoadingButton";
+import React from "react";
 import { useFormik } from "formik";
+import * as Yup from "yup";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import * as Yup from "yup";
+import LoadingButton from "@material-ui/lab/LoadingButton";
 import BoxedLayout from "../../core/components/BoxedLayout";
 import { useSnackbar } from "../../core/contexts/SnackbarProvider";
-import { useRegister } from "../hooks/useRegister";
+import useRegister from "../../auth/hooks/useRegister"; // Adjusted import path
 import { UserInfo } from "../types/userInfo";
 
 const genders = [
@@ -36,6 +39,7 @@ const Register = () => {
       firstName: "",
       gender: "F",
       lastName: "",
+      password: "", // Add password field
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -47,6 +51,9 @@ const Register = () => {
       lastName: Yup.string()
         .max(30, t("common.validations.max", { size: 30 }))
         .required(t("common.validations.required")),
+      password: Yup.string()
+        .min(8, t("common.validations.min", { size: 8 }))
+        .required(t("common.validations.required")),
     }),
     onSubmit: (values) => handleRegister(values),
   });
@@ -55,7 +62,7 @@ const Register = () => {
     register(values as UserInfo)
       .then(() => {
         snackbar.success(t("auth.register.notifications.success"));
-        navigate(`/${process.env.PUBLIC_URL}/login`);
+        navigate(`/login`);
       })
       .catch(() => {
         snackbar.error(t("common.errors.unexpected.subTitle"));
@@ -101,6 +108,21 @@ const Register = () => {
           onChange={formik.handleChange}
           error={formik.touched.firstName && Boolean(formik.errors.firstName)}
           helperText={formik.touched.firstName && formik.errors.firstName}
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          id="password"
+          label={t("auth.register.form.password.label")}
+          name="password"
+          type="password"
+          autoComplete="new-password"
+          disabled={isRegistering}
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          error={formik.touched.password && Boolean(formik.errors.password)}
+          helperText={formik.touched.password && formik.errors.password}
         />
         <FormControl component="fieldset" margin="normal">
           <FormLabel component="legend">
@@ -151,7 +173,7 @@ const Register = () => {
         </LoadingButton>
         <Button
           component={Link}
-          to={`/${process.env.PUBLIC_URL}/login`}
+          to={`/login`}
           color="primary"
           fullWidth
           sx={{ mt: 2 }}
@@ -164,3 +186,4 @@ const Register = () => {
 };
 
 export default Register;
+

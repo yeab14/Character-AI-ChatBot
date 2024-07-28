@@ -1,10 +1,13 @@
+
+// src/auth/types/userInfo.ts
 export interface UserInfo {
-  id: string;
-  avatar?: string;
   email: string;
   firstName: string;
-  job: string;
   lastName: string;
+  password: string;
+  id: string;
+  avatar?: string;
+  job: string;
   progress: number;
   role: string;
 }
