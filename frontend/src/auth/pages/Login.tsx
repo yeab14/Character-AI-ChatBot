@@ -37,8 +37,8 @@ const Login = () => {
       try {
         await login(values);
         snackbar.success(t("auth.login.notifications.success"));
-        navigate("/admin", { replace: true }); // Ensure correct navigation
-      } catch (error) {
+        navigate("/react-material-admin/admin", { replace: true }); // Correct navigation path
+      } catch {
         snackbar.error(t("common.errors.unexpected.subTitle"));
       }
     },
@@ -105,7 +105,7 @@ const Login = () => {
             <Box sx={{ textAlign: "right", mt: 1 }}>
               <Link
                 component={RouterLink}
-                to="/forgot-password"
+                to="/react-material-admin/forgot-password"
                 variant="body2"
               >
                 {t("auth.login.forgotPasswordLink")}
@@ -123,7 +123,7 @@ const Login = () => {
             </LoadingButton>
             <Button
               component={RouterLink}
-              to="/register"
+              to="/react-material-admin/register"
               color="primary"
               fullWidth
               sx={{ mt: 2 }}
@@ -138,4 +138,5 @@ const Login = () => {
 };
 
 export default Login;
+
 
